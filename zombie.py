@@ -31,9 +31,11 @@ class Zombie:
 
     def __init__(self):
         self.x, self.y = random.randint(1600-800, 1600), 150
+        self.col_min_x, self.col_min_y, self.col_max_x, self.col_max_y = 100, 100, -100, -100
         self.load_images()
         self.frame = random.randint(0, 9)
         self.dir = random.choice([-1,1])
+        self.unhitten = True
 
 
     def update(self):
@@ -59,10 +61,15 @@ class Zombie:
         pass
 
     def get_bb(self):
-        return self.x-100, self.y-100, self.x+100, self.y+100
+        return self.x+self.col_min_x, self.y+self.col_min_y, self.x+self.col_max_x, self.y+self.col_max_y
 
     def handle_collision(self, group, other):
         if group == 'boy:zombie':
             quit()
-        if group == 'zombie:ball':
-            print("oops")
+        if group == 'zombie:fired_ball':
+            if self.unhitten:
+                self.x, self.y = 100, 100
+                self.col_min_x, self.col_min_y, self.col_max_x, self.col_max_y = 50, 50, 50, 50
+                self.unhitten = False
+            else:
+                pass
