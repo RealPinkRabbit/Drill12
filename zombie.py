@@ -4,6 +4,8 @@ import game_framework
 
 from pico2d import *
 
+import game_world
+
 # zombie Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
 RUN_SPEED_KMPH = 10.0  # Km / Hour
@@ -50,8 +52,17 @@ class Zombie:
             Zombie.images['Walk'][int(self.frame)].composite_draw(0, 'h', self.x, self.y, 200, 200)
         else:
             Zombie.images['Walk'][int(self.frame)].draw(self.x, self.y, 200, 200)
+        draw_rectangle(*self.get_bb())
 
 
     def handle_event(self, event):
         pass
 
+    def get_bb(self):
+        return self.x-100, self.y-100, self.x+100, self.y+100
+
+    def handle_collision(self, group, other):
+        if group == 'boy:zombie':
+            quit()
+        if group == 'zombie:ball':
+            print("oops")

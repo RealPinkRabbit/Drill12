@@ -25,7 +25,6 @@ def init():
     global grass
     global boy
     global balls
-
     running = True
 
     grass = Grass()
@@ -37,15 +36,21 @@ def init():
     balls = [Ball(random.randint(100, 1600-100), 60, 0) for _ in range(30)]
     game_world.add_objects(balls, 1)
 
-    # fill here
-    # 충돌 상황을 등록... boy와 balls들의 충돌 상황을 등록.
-    game_world.add_collision_pair('boy:ball', boy, None)
-    for ball in balls:
-        game_world.add_collision_pair('boy:ball', None, ball)
 
     # 좀비 5마리 추가
     zombies = [Zombie() for _ in range(5)]
     game_world.add_objects(zombies, 1)
+
+    # fill here
+    # 충돌 상황을 등록... boy와 balls들의 충돌 상황을 등록.
+    game_world.add_collision_pair('boy:ball', boy, None)
+    game_world.add_collision_pair('boy:zombie', boy, None)
+    for ball in balls:
+        game_world.add_collision_pair('boy:ball', None, ball)
+    for zombie in zombies:
+        game_world.add_collision_pair('boy:zombie', None, zombie)
+
+
 
 def finish():
     game_world.clear()
