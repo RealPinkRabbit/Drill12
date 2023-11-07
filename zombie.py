@@ -31,9 +31,12 @@ class Zombie:
 
     def __init__(self):
         self.x, self.y = random.randint(1600-800, 1600), 150
+        self.width, self.height = 200, 200
+        self.min_x, self.min_y, self.max_x, self.max_y = -100, -100, 100, 100
         self.load_images()
         self.frame = random.randint(0, 9)
         self.dir = random.choice([-1,1])
+        self.unhitten = True
 
 
     def update(self):
@@ -49,9 +52,9 @@ class Zombie:
 
     def draw(self):
         if self.dir < 0:
-            Zombie.images['Walk'][int(self.frame)].composite_draw(0, 'h', self.x, self.y, 200, 200)
+            Zombie.images['Walk'][int(self.frame)].composite_draw(0, 'h', self.x, self.y, self.width, self.height)
         else:
-            Zombie.images['Walk'][int(self.frame)].draw(self.x, self.y, 200, 200)
+            Zombie.images['Walk'][int(self.frame)].draw(self.x, self.y, self.width, self.height)
         draw_rectangle(*self.get_bb())
 
 
@@ -59,10 +62,16 @@ class Zombie:
         pass
 
     def get_bb(self):
-        return self.x-100, self.y-100, self.x+100, self.y+100
+        return (self.x+self.min_x, self.y+self.min_y, self.x+self.max_x, self.y+self.max_y)
 
     def handle_collision(self, group, other):
         if group == 'boy:zombie':
             quit()
-        if group == 'zombie:ball':
-            print("oops")
+        if group == 'zombie:fired_ball':
+            if self.unhitten:
+                self.y -= 50
+                self.width, self.height = 100, 100
+                self.min_x, self.min_y, self.max_x, self.max_y = -50, -50, 50, 50
+                self.unhitten = False
+            else:
+                game_world.remove_object(self)

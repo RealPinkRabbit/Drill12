@@ -196,7 +196,7 @@ class Boy:
             self.ball_count -= 1
             ball = Ball(self.x, self.y, self.face_dir*10)
             game_world.add_object(ball)
-            game_world.add_collision_pair('zombie:ball', None, ball)
+            game_world.add_collision_pair('zombie:fired_ball', None, ball)
 
     def update(self):
         self.state_machine.update()
